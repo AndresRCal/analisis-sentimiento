@@ -96,9 +96,15 @@ def calcula_resultado_valor(x2):
         elif result_chain == '1001':
             result=float(x2['SENTIMIENTO_PALABRA'][x2['POSICION']==i2])*float(x2['ADM'][x2['POSICION']==i2])
         elif result_chain == '1010':
-            result=float(x2['SENTIMIENTO_PALABRA'][x2['POSICION']==i2])*float(x2['Negadores'][x2['POSICION']==i2])
+            if float(x2['SENTIMIENTO_PALABRA'][x2['POSICION']==i2]) < 0:
+                result=float(x2['SENTIMIENTO_PALABRA'][x2['POSICION']==i2])*float(x2['Negadores'][x2['POSICION']==i2])*(-1)
+            else:
+                result=float(x2['SENTIMIENTO_PALABRA'][x2['POSICION']==i2])*float(x2['Negadores'][x2['POSICION']==i2])
         elif result_chain == '1011':
-            result=float(x2['SENTIMIENTO_PALABRA'][x2['POSICION']==i2])*float(x2['Negadores'][x2['POSICION']==i2])*float(x2['ADM'][x2['POSICION']==i2])
+            if float(x2['SENTIMIENTO_PALABRA'][x2['POSICION']==i2]) < 0:
+                result=float(x2['SENTIMIENTO_PALABRA'][x2['POSICION']==i2])*float(x2['Negadores'][x2['POSICION']==i2])*float(x2['ADM'][x2['POSICION']==i2])*(-1)
+            else:
+                result=float(x2['SENTIMIENTO_PALABRA'][x2['POSICION']==i2])*float(x2['Negadores'][x2['POSICION']==i2])*float(x2['ADM'][x2['POSICION']==i2])
         elif result_chain == '1100':
             result=float(x2['SENTIMIENTO_PALABRA'][x2['POSICION']==i2])*float(x2['INTENSIFICADOR'][x2['POSICION']==i2])
         elif result_chain == '1101':
@@ -156,27 +162,10 @@ def correr_valor_multiplicador(x1):
         pass
 
 #     CORRER SIGNOS DE ADMIRACION!
-    if len(list_ADM) > 0 and len(list_romp) > 0:
-        for i in list_ADM:
-            CntMns=hay_menor_q_A_en_B(i,list_romp)
-            if CntMns > 0:
-                pos_init=siguiente_menor_n_B(i,list_romp)
-                pos_fin=int(i)
-                x1.iloc[int(pos_init):int(pos_fin),7]=float(x1['ADM'][x1['POSICION'] == pos_fin])
-            else:
-                pos_init=0
-                pos_fin=int(i)
-                x1.iloc[int(pos_init):int(pos_fin),7]=float(x1['ADM'][x1['POSICION'] == pos_fin])
-    elif len(list_ADM) > 0 and len(list_romp) == 0:
-        if len(list_intns) == 1:
-            pos_init=0
-            pos_fin=int(list_ADM[0])
-            x1.iloc[int(pos_init):int(pos_fin),7]=float(x1['ADM'][x1['POSICION'] == pos_fin])
-        else:
-#                hay que trabajar en este caso
-             pos_init=0
-             pos_fin=pos_finT
-             x1.iloc[int(pos_init):int(pos_fin),7]=float(x1['ADM'][x1['POSICION'] == pos_fin])
+    if len(list_ADM) > 0:
+        pos_fin=int(list_ADM[len(list_ADM)-1])+1
+        pos_init=0
+        x1.iloc[int(pos_init):int(pos_fin),5]=2
     else:
         pass
     
